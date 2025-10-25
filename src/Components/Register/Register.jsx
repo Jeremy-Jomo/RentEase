@@ -56,25 +56,13 @@ function Register() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-black">
+    <div className="flex items-center justify-center min-h-screen bg-white">
       <div className="w-full max-w-md bg-white text-black rounded-3xl shadow-2xl border border-gray-300 p-10">
         {/* Header */}
         <div className="text-center mb-4">
           <h2 className="text-3xl font-extrabold">Create Account ✨</h2>
           <p className="text-sm text-gray-600 mt-2">Sign up to get started</p>
         </div>
-
-        {/* Error & Success */}
-        {registerError && (
-          <div className="mb-4 text-sm text-red-600 font-semibold text-center">
-            {registerError}
-          </div>
-        )}
-        {registerSuccess && (
-          <div className="mb-4 text-sm text-green-600 font-semibold text-center">
-            {registerSuccess}
-          </div>
-        )}
 
         <Formik
           initialValues={{
@@ -187,6 +175,17 @@ function Register() {
               >
                 {isSubmitting ? "Registering..." : "Register"}
               </button>
+              {/* Error & Success */}
+              {registerError && (
+                <div className="mb-4 text-sm text-red-600 font-semibold text-center">
+                  {registerError}
+                </div>
+              )}
+              {registerSuccess && (
+                <div className="mb-4 text-sm text-green-600 font-semibold text-center">
+                  {registerSuccess}
+                </div>
+              )}
 
               {/* Footer */}
               <p className="text-sm text-center text-gray-600 mt-4">
