@@ -21,7 +21,7 @@ const PropertyDetails = () => {
     <div>
       <h2>{property.title}</h2>
       <p>Location: {property.location}</p>
-      <p>Rent Price: {property.rent_price}</p>
+      <p>Rent Price: Ksh.{property.rent_price}</p>
       <h3>Amenities:</h3>
       <ul>
         {property.amenities && property.amenities.length > 0 ? (
