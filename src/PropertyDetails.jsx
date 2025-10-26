@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { PropertyContext } from "./PropertyContext";
 
 const PropertyDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { properties, setProperties } = useContext(PropertyContext);
   const [property, setProperty] = useState(null);
 
@@ -33,6 +34,7 @@ const PropertyDetails = () => {
           <li>No amenities listed</li>
         )}
       </ul>
+      <button onClick={() => navigate("/")}>Back to Properties</button>
     </div>
   );
 };
