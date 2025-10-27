@@ -1,11 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // if using React Router
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
 function Login() {
+  const navigate = useNavigate(); // React Router v6 hook
   const [loginError, setLoginError] = useState("");
 
-  // ✅ Validation schema
   const validationSchema = Yup.object({
     email: Yup.string()
       .email("Invalid email format")
@@ -15,9 +16,8 @@ function Login() {
       .required("Password is required"),
   });
 
-  // ✅ Submit logic
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
-    setLoginError(""); // clear previous error
+    setLoginError("");
     try {
       const response = await fetch("http://127.0.0.1:5000/login", {
         method: "POST",
@@ -28,32 +28,43 @@ function Login() {
       const data = await response.json();
 
       if (response.ok) {
+        // Save token and role
         localStorage.setItem("token", data.token);
-        alert("✅ Login successful!");
-        resetForm();
+        localStorage.setItem("role", data.role); // make sure the backend returns the role
+
+        // Redirect based on role
+        switch (data.role) {
+          case "admin":
+            navigate("/admin-dashboard");
+            break;
+          case "landlord":
+            navigate("/landlord-dashboard");
+            break;
+          case "tenant":
+            navigate("/tenant-dashboard");
+            break;
+          default:
+            navigate("/");
+        }
       } else {
         setLoginError(data.error || "❌ Login failed");
       }
     } catch (err) {
       console.error("Error:", err);
-      setLoginError("Something went wrong. Please try again.");
+      setLoginError("Something went wrong.");
     } finally {
       setSubmitting(false);
+      resetForm();
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-white">
       <div className="w-full max-w-md bg-white text-black rounded-3xl shadow-2xl border border-gray-300 p-10">
-        {/* Header */}
         <div className="text-center mb-4">
           <h2 className="text-3xl font-extrabold">Welcome Back 👋</h2>
-          <p className="text-sm text-gray-600 mt-2">
-            Log in to access your account
-          </p>
         </div>
 
-        {/* Form */}
         <Formik
           initialValues={{ email: "", password: "" }}
           validationSchema={validationSchema}
@@ -61,7 +72,6 @@ function Login() {
         >
           {({ isSubmitting }) => (
             <Form className="space-y-6">
-              {/* Email Field */}
               <div>
                 <label
                   htmlFor="email"
@@ -82,7 +92,6 @@ function Login() {
                 />
               </div>
 
-              {/* Password Field */}
               <div>
                 <label
                   htmlFor="password"
@@ -101,9 +110,14 @@ function Login() {
                   component="div"
                   className="mt-1 text-sm text-red-500"
                 />
+
+                {loginError && (
+                  <div className="mb-4 text-sm text-red-600 font-semibold text-center">
+                    {loginError}
+                  </div>
+                )}
               </div>
 
-              {/* Submit */}
               <button
                 type="submit"
                 disabled={isSubmitting}
@@ -111,23 +125,6 @@ function Login() {
               >
                 {isSubmitting ? "Logging in..." : "Login"}
               </button>
-              {/* Inline Login Error */}
-              {loginError && (
-                <div className="mb-4 text-sm text-red-600 font-semibold text-center">
-                  {loginError}
-                </div>
-              )}
-
-              {/* Footer */}
-              <p className="text-sm text-center text-gray-600 mt-4">
-                Don’t have an account?{" "}
-                <a
-                  href="/register"
-                  className="font-semibold text-black hover:text-gray-700 underline"
-                >
-                  Register here
-                </a>
-              </p>
             </Form>
           )}
         </Formik>
