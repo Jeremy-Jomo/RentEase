@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { PropertyContext } from "./PropertyContext";
+import { PropertyContext } from "./PropertyDetailsContext";
 
 const PropertyDetails = () => {
   const { id } = useParams();
@@ -9,7 +9,7 @@ const PropertyDetails = () => {
   const [property, setProperty] = useState(null);
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:5000/properties/${id}`)
+    fetch(`http://localhost:5000/properties/${id}`)
       .then((res) => res.json())
       .then((data) => setProperty(data))
       .catch((err) => console.error(err));
@@ -38,6 +38,5 @@ const PropertyDetails = () => {
     </div>
   );
 };
-
 
 export default PropertyDetails;

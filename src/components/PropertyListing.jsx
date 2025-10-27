@@ -1,9 +1,12 @@
 import React from "react";
 import "./PropertyListing.css";
 import { useProperties } from "./pages/context/PropertyContext";
+import { useNavigate } from "react-router-dom";
+import PropertyDetails from "../PropertyDetails";
 
 const PropertyListing = () => {
   const { properties, loading } = useProperties();
+  const navigate = useNavigate();
 
   if (loading) {
     return <div className="loading">Loading properties...</div>;
@@ -82,7 +85,14 @@ const PropertyListing = () => {
                   <p className="location">{property.location}</p>
                   <p className="price">KSh {property.rent_price}</p>
                   <p className="description">{property.description}</p>
-                  <button className="details-button">Property Details</button>
+                  <button
+                    className="details-button"
+                    onClick={() => {
+                      navigate(`/property/${property.id}`);
+                    }}
+                  >
+                    Property Details
+                  </button>
                 </div>
               </div>
             ))}
