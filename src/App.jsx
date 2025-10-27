@@ -4,6 +4,7 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 import Login from "./Components/LoginPage/Login";
 import Register from "./Components/Register/Register";
+import { object } from "yup";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -38,3 +39,4 @@ function App() {
 }
 
 export default App;
+object
