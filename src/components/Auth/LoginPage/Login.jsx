@@ -2,10 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom"; // if using React Router
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { useContext } from "react";
+import { UserContext } from "../../pages/context/UserContext";
 
 function Login() {
   const navigate = useNavigate(); // React Router v6 hook
   const [loginError, setLoginError] = useState("");
+  const { loginUser } = useContext(UserContext);
 
   const validationSchema = Yup.object({
     email: Yup.string()

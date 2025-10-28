@@ -9,7 +9,7 @@ import PropertyDetails from "./PropertyDetails";
 import LandlordDash from "./components/Dashboards/Landlord/LandlordDash";
 import AddProperty from "./components/Dashboards/Landlord/AddProperty";
 import TenantDash from "./components/Dashboards/Tenants/TenantDashboard";
-
+import AdminDashboard from "./components/pages/AdminDashboard";
 function App() {
   return (
     <PropertyProvider>
@@ -22,6 +22,7 @@ function App() {
           <Route path="/landlord-dashboard" element={<LandlordDash />} />
           <Route path="/addProperty" element={<AddProperty />} />
           <Route path="/tenant-dashboard" element={<TenantDash />} />
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
         </Routes>
       </Router>
     </PropertyProvider>
