@@ -9,7 +9,7 @@ const PropertyListing = () => {
   const navigate = useNavigate();
 
   if (loading) {
-    return <div className="loading">Loading properties...</div>;
+    return <div className="loading">getting your properties...</div>;
   }
 
   return (
