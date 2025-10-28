@@ -6,19 +6,24 @@ import PropertyListing from "./components/PropertyListing";
 import Login from "./components/Auth/LoginPage/Login";
 import Register from "./components/Auth/Register/Register";
 import PropertyDetails from "./PropertyDetails";
+import LandlordDash from "./components/Dashboards/Landlord/LandlordDash";
+import AddProperty from "./components/Dashboards/Landlord/AddProperty";
+import TenantDash from "./components/Dashboards/Tenants/TenantDashboard";
 import LandingPage from "./components/pages/landingpage/landingpage";
 import AdminDashboard from "./components/pages/AdminDashboard";
-
 function App() {
   return (
     <PropertyProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<LandingPage/>}/>
+          <Route path="/" element={<LandingPage />} />
           <Route path="/propertylisting" element={<PropertyListing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/property/:id" element={<PropertyDetails />} />
+          <Route path="/landlord-dashboard" element={<LandlordDash />} />
+          <Route path="/addProperty" element={<AddProperty />} />
+          <Route path="/tenant-dashboard" element={<TenantDash />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
         </Routes>
       </Router>

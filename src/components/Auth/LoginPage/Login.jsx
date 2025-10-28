@@ -33,6 +33,7 @@ function Login() {
       if (response.ok) {
         // Save user info globally
         loginUser({
+          id: data.user?.id,
           token: data.token,
           role: data.user?.role,
           email: data.user?.email,
@@ -63,7 +64,6 @@ function Login() {
       setLoginError("Something went wrong.");
     } finally {
       setSubmitting(false);
-      resetForm();
     }
   };
 

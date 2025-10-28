@@ -8,18 +8,20 @@ export const UserProvider = ({ children }) => {
 
   // Load user from localStorage on mount
   useEffect(() => {
+    const id = localStorage.getItem("id");
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
     const email = localStorage.getItem("email");
     const name = localStorage.getItem("name");
 
     if (token && role) {
-      setUser({ token, role, email, name });
+      setUser({ id, token, role, email, name });
     }
   }, []);
 
   // Save user details after login
   const loginUser = (userData) => {
+    localStorage.setItem("id", userData.id);
     localStorage.setItem("token", userData.token);
     localStorage.setItem("role", userData.role);
     localStorage.setItem("email", userData.email);
