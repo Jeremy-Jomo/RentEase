@@ -9,13 +9,15 @@ import PropertyDetails from "./PropertyDetails";
 import LandlordDash from "./components/Dashboards/Landlord/LandlordDash";
 import AddProperty from "./components/Dashboards/Landlord/AddProperty";
 import TenantDash from "./components/Dashboards/Tenants/TenantDashboard";
+import LandingPage from "./components/pages/landingpage/landingpage";
 import AdminDashboard from "./components/pages/AdminDashboard";
 function App() {
   return (
     <PropertyProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<PropertyListing />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/propertylisting" element={<PropertyListing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/property/:id" element={<PropertyDetails />} />
