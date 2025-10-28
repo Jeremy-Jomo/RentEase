@@ -6,13 +6,15 @@ import PropertyListing from "./components/PropertyListing";
 import Login from "./components/Auth/LoginPage/Login";
 import Register from "./components/Auth/Register/Register";
 import PropertyDetails from "./PropertyDetails";
+import LandingPage from "./components/pages/landingpage/landingpage";
 
 function App() {
   return (
     <PropertyProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<PropertyListing />} />
+          <Route path="/" element={<LandingPage/>}/>
+          <Route path="/propertylisting" element={<PropertyListing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/property/:id" element={<PropertyDetails />} />
