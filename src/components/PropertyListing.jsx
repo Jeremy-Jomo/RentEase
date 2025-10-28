@@ -1,9 +1,12 @@
 import React from "react";
 import "./PropertyListing.css";
 import { useProperties } from "./pages/context/PropertyContext";
+import { useNavigate } from "react-router-dom";
+import PropertyDetails from "../PropertyDetails";
 
 const PropertyListing = () => {
   const { properties, loading } = useProperties();
+  const navigate = useNavigate();
 
   if (loading) {
     return <div className="loading">getting your properties...</div>;
@@ -11,18 +14,23 @@ const PropertyListing = () => {
 
   return (
     <div className="property-page">
-  <header className="navbar bg-gray-900 text-white shadow-md">
-    <nav className="navbar-container flex justify-between items-center px-8 py-4">
-    <div className="logo text-2xl font-bold tracking-wide">RentEase</div>
-      <ul className="nav-links flex space-x-8 text-lg">
-        <li className="hover:text-blue-400 cursor-pointer transition-colors duration-200">Home</li>
-        <li className="hover:text-blue-400 cursor-pointer transition-colors duration-200">Properties</li>
-        <li className="hover:text-blue-400 cursor-pointer transition-colors duration-200">Contact</li>
-      </ul>
+      <header className="navbar bg-gray-900 text-white shadow-md">
+        <nav className="navbar-container flex justify-between items-center px-8 py-4">
+          <div className="logo text-2xl font-bold tracking-wide">RentEase</div>
+          <ul className="nav-links flex space-x-8 text-lg">
+            <li className="hover:text-blue-400 cursor-pointer transition-colors duration-200">
+              Home
+            </li>
+            <li className="hover:text-blue-400 cursor-pointer transition-colors duration-200">
+              Properties
+            </li>
+            <li className="hover:text-blue-400 cursor-pointer transition-colors duration-200">
+              Contact
+            </li>
+          </ul>
         </nav>
       </header>
 
-  
       <section className="hero-section relative isolate px-6 pt-14 lg:px-8">
         <div
           className="relative min-h-screen bg-cover bg-center bg-no-repeat bg-fixed"
@@ -51,7 +59,6 @@ const PropertyListing = () => {
         </div>
       </section>
 
-
       <main className="main-content">
         <div className="content-container">
           <div className="section-header">
@@ -78,7 +85,14 @@ const PropertyListing = () => {
                   <p className="location">{property.location}</p>
                   <p className="price">KSh {property.rent_price}</p>
                   <p className="description">{property.description}</p>
-                  <button className="details-button">Property Details</button>
+                  <button
+                    className="details-button"
+                    onClick={() => {
+                      navigate(`/property/${property.id}`);
+                    }}
+                  >
+                    Property Details
+                  </button>
                 </div>
               </div>
             ))}
