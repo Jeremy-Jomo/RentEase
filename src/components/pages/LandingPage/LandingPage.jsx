@@ -7,7 +7,7 @@ const LandingPage = () => {
       {/* Navbar - Transparent over hero image */}
       <nav className="absolute top-0 left-0 w-full bg-transparent z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          {/* Logo and Title */}
+          
           <div className="flex items-center space-x-3">
             <img src={logo} alt="RentEase Logo" className="h-20 w-auto" />
             <h1 className="text-2xl font-bold text-white drop-shadow-lg">
@@ -15,7 +15,7 @@ const LandingPage = () => {
             </h1>
           </div>
 
-          {/* Navigation Links */}
+          
           <div className="hidden md:flex space-x-6">
             {["Home", "Properties", "About Us"].map((link) => (
               <a
@@ -36,7 +36,7 @@ const LandingPage = () => {
         </div>
       </nav>
 
-      {/* Hero Section */}
+      
       <section className="relative h-screen flex items-center justify-center">
         <img
           src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1600"
@@ -62,7 +62,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* What We Do Section */}
+      
       <section className="py-20 bg-gray-50" id="about">
         <div className="max-w-6xl mx-auto px-6 text-center">
           <h2 className="text-3xl font-bold text-gray-900 mb-10">What We Do</h2>
@@ -99,7 +99,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Featured Property */}
+     
       <section className="py-20">
         <div className="max-w-6xl mx-auto px-6 text-center">
           <h2 className="text-3xl font-bold mb-10 text-gray-900">
@@ -127,17 +127,14 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Get in Touch Section */}
+     
       <section id="contact" className="py-20 bg-gray-100">
         <div className="max-w-6xl mx-auto px-6 text-center">
           <h2 className="text-3xl font-bold text-gray-900 mb-10">
             Get in Touch
           </h2>
           <div className="bg-white p-8 rounded-2xl shadow-md max-w-2xl mx-auto">
-            <p className="text-gray-700 mb-4">
-              Have questions or want to list your property? Reach out to us and
-              we’ll be happy to help!
-            </p>
+            
             <p className="text-gray-700">
               <strong>Email:</strong> support@rentease.com
             </p>
@@ -147,9 +144,7 @@ const LandingPage = () => {
             <p className="text-gray-700">
               <strong>Location:</strong> Nairobi, Kenya
             </p>
-            <p className="text-gray-700 mt-4">
-              We’re available Monday to Saturday, 8am - 6pm.
-            </p>
+           
           </div>
         </div>
       </section>
