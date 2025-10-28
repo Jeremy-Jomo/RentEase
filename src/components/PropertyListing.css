@@ -3,8 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
 .hero-gradient-one {
   background: linear-gradient(135deg, #ec4899 0%, #6366f1 100%);
   opacity: 0.3;
@@ -18,7 +16,6 @@
   height: auto;
 }
 
-
 .hero-button-primary {
   @apply bg-indigo-500 hover:bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg;
 }
@@ -26,7 +23,6 @@
 .hero-button-secondary {
   @apply text-gray-300 hover:text-white font-semibold px-6 py-3 rounded-lg;
 }
-
 
 .property-card {
   @apply bg-white rounded-xl shadow-lg overflow-hidden relative;
@@ -56,14 +52,12 @@
   @apply bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold mt-2;
 }
 
-
 .navbar {
   @apply absolute inset-x-0 top-0 z-50 p-6;
 }
 
 .navbar-container {
   @apply flex justify-between items-center;
-  
 }
 
 .logo {
@@ -78,7 +72,6 @@
   @apply hover:text-indigo-500 cursor-pointer;
 }
 
-
 .hero-overlay {
   @apply text-center py-32 px-6;
 }
@@ -90,7 +83,6 @@
 .hero-overlay p {
   @apply mt-8 text-lg sm:text-xl text-gray-200;
 }
-
 
 .main-content {
   @apply bg-gray-100 text-gray-900 py-20 px-6;
