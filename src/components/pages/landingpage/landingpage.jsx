@@ -123,8 +123,8 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Get in Touch Section */}
-      <section id="contact" className="py-20 bg-gray-100">
+    
+      <section id="contact" className="py-20 bg-pink-100">
         <div className="max-w-6xl mx-auto px-6 text-center">
           <h2 className="text-3xl font-bold text-gray-900 mb-10">
             Get in Touch
