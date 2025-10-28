@@ -106,6 +106,40 @@ function LandlordDash() {
       })
       .catch(() => showNotification("Error updating property", "error"));
   };
+  // Approve Booking
+  const handleApproveBooking = (bookingId) => {
+    fetch(`${API_BASE}/bookings/${bookingId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: "Approved" }),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to approve booking");
+        return res.json();
+      })
+      .then((updatedBooking) => {
+        setBookings((prev) =>
+          prev.map((b) => (b.id === bookingId ? updatedBooking : b))
+        );
+        showNotification("Booking approved successfully!", "success");
+      })
+      .catch(() => showNotification("Error approving booking", "error"));
+  };
+
+  // Delete (Decline) Booking
+  const handleDeleteBooking = (bookingId) => {
+    if (!confirm("Are you sure you want to delete this booking?")) return;
+
+    fetch(`${API_BASE}/bookings/${bookingId}`, {
+      method: "DELETE",
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to delete booking");
+        setBookings((prev) => prev.filter((b) => b.id !== bookingId));
+        showNotification("Booking deleted successfully!", "success");
+      })
+      .catch(() => showNotification("Failed to delete booking", "error"));
+  };
 
   if (loading)
     return (
@@ -158,44 +192,64 @@ function LandlordDash() {
         </p>
 
         {bookings.length === 0 ? (
-          <p className="text-gray-600 italic">No bookings yet.</p>
+          <p className="text-gray-600 italic">
+            No bookings yet for your properties.
+          </p>
         ) : (
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {bookings.map((booking) => (
               <div
                 key={booking.id}
-                className="border rounded-lg p-3 bg-gray-50 flex flex-col gap-1"
+                className="bg-gray-50 p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col justify-between"
               >
-                <p>
-                  <span className="font-semibold">Property:</span>{" "}
-                  {booking.property_title || "N/A"}
-                </p>
-                <p>
-                  <span className="font-semibold">Tenant:</span>{" "}
-                  {booking.tenant_name || "N/A"}
-                </p>
-                <p>
-                  <span className="font-semibold">Start Date:</span>{" "}
-                  {booking.start_date}
-                </p>
-                <p>
-                  <span className="font-semibold">End Date:</span>{" "}
-                  {booking.end_date}
-                </p>
-                <p>
-                  <span className="font-semibold">Status:</span>{" "}
-                  <span
-                    className={`${
-                      booking.status === "Approved"
-                        ? "text-green-600"
-                        : booking.status === "Rejected"
-                        ? "text-red-600"
-                        : "text-gray-600"
-                    } font-semibold`}
+                <div>
+                  <h4 className="font-semibold text-gray-800 text-lg mb-1">
+                    {booking.property?.title || "Property"}
+                  </h4>
+                  <p className="text-gray-600 text-sm">
+                    Location: {booking.property?.location || "N/A"}
+                  </p>
+                  <p className="text-gray-600 text-sm">
+                    Rent: ${booking.property?.rent_price || "N/A"}
+                  </p>
+                  <p className="text-gray-600 text-sm">
+                    Tenant: {booking.tenant_name || "Unknown"}
+                  </p>
+                  <p className="text-gray-500 text-sm mt-2">
+                    Date: {new Date(booking.date).toLocaleDateString()}
+                  </p>
+                  <p className="text-gray-500 text-sm mt-1">
+                    Status:{" "}
+                    <span
+                      className={`font-semibold ${
+                        booking.status === "approved"
+                          ? "text-green-600"
+                          : booking.status === "pending"
+                          ? "text-yellow-600"
+                          : "text-red-600"
+                      }`}
+                    >
+                      {booking.status}
+                    </span>
+                  </p>
+                </div>
+
+                <div className="flex gap-2 justify-end mt-3">
+                  {booking.status === "pending" && (
+                    <button
+                      onClick={() => handleApproveBooking(booking.id)}
+                      className="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg text-sm"
+                    >
+                      Approve
+                    </button>
+                  )}
+                  <button
+                    onClick={() => handleDeleteBooking(booking.id)}
+                    className="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-lg text-sm"
                   >
-                    {booking.status || "Pending"}
-                  </span>
-                </p>
+                    Delete
+                  </button>
+                </div>
               </div>
             ))}
           </div>

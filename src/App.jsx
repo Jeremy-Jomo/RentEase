@@ -6,8 +6,9 @@ import PropertyListing from "./components/PropertyListing";
 import Login from "./components/Auth/LoginPage/Login";
 import Register from "./components/Auth/Register/Register";
 import PropertyDetails from "./PropertyDetails";
-import LandlordDash from "./components/Dashboards/LandlordDash";
-import AddProperty from "./components/Dashboards/AddProperty";
+import LandlordDash from "./components/Dashboards/Landlord/LandlordDash";
+import AddProperty from "./components/Dashboards/Landlord/AddProperty";
+import TenantDash from "./components/Dashboards/Tenants/TenantDashboard";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/property/:id" element={<PropertyDetails />} />
           <Route path="/landlord-dashboard" element={<LandlordDash />} />
           <Route path="/addProperty" element={<AddProperty />} />
+          <Route path="/tenant-dashboard" element={<TenantDash />} />
         </Routes>
       </Router>
     </PropertyProvider>
