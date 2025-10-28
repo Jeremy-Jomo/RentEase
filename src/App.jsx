@@ -7,6 +7,7 @@ import Login from "./components/Auth/LoginPage/Login";
 import Register from "./components/Auth/Register/Register";
 import PropertyDetails from "./PropertyDetails";
 import LandingPage from "./components/pages/landingpage/landingpage";
+import AdminDashboard from "./components/pages/AdminDashboard";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/property/:id" element={<PropertyDetails />} />
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
         </Routes>
       </Router>
     </PropertyProvider>
