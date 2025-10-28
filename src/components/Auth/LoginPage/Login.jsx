@@ -22,7 +22,7 @@ function Login() {
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     setLoginError("");
     try {
-      const response = await fetch("http://localhost:5000/login", {
+      const response = await fetch("http://127.0.0.1:5000/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
@@ -31,12 +31,19 @@ function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        // Save token and role
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user)); // make sure the backend returns the role
-        console.log("Login successful:", data);
+        // Save user info globally
+        loginUser({
+          id: data.user?.id,
+          token: data.token,
+          role: data.user?.role,
+          email: data.user?.email,
+          name: data.user?.name,
+        });
+
+        console.log("User saved:", data);
+
         // Redirect based on role
-        switch (data.user.role) {
+        switch (data.user?.role) {
           case "admin":
             navigate("/admin-dashboard");
             break;
@@ -57,7 +64,6 @@ function Login() {
       setLoginError("Something went wrong.");
     } finally {
       setSubmitting(false);
-      resetForm();
     }
   };
 
@@ -128,17 +134,6 @@ function Login() {
               >
                 {isSubmitting ? "Logging in..." : "Login"}
               </button>
-
-              {/* Footer */}
-              <p className="text-sm text-center text-black/90 mt-4">
-                Don’t have an account?{" "}
-                <a
-                  href="/register"
-                  className="font-semibold text-black-200 hover:text-grey underline"
-                >
-                  Register here
-                </a>
-              </p>
             </Form>
           )}
         </Formik>

@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../pages/context/UserContext";
 
 const API_BASE = "http://127.0.0.1:5000";
 
 function LandlordDash() {
   const navigate = useNavigate();
-  const [landlord, setLandlord] = useState(null);
+  const { user, logoutUser } = useContext(UserContext);
   const [properties, setProperties] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,25 +20,36 @@ function LandlordDash() {
     image_url: "",
   });
 
-  // Load landlord + data
+  // ✅ Load landlord data safely
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (!storedUser) return;
+    if (!user) {
+      navigate("/login");
+      return;
+    }
 
-    const user = JSON.parse(storedUser);
-    if (user.role !== "landlord") return;
+    if (user.role !== "landlord") {
+      navigate("/");
+      return;
+    }
 
-    setLandlord(user);
+    const landlordId = user.id || JSON.parse(localStorage.getItem("user"))?.id;
 
+    if (!landlordId) {
+      console.error("Landlord ID missing");
+      return;
+    }
+
+    // Fetch landlord properties
     fetch(`${API_BASE}/properties`)
       .then((res) => res.json())
       .then((allProperties) => {
         const landlordProps = allProperties.filter(
-          (p) => p.landlord_id === user.id
+          (p) => p.landlord_id === landlordId
         );
         setProperties(landlordProps);
 
-        return fetch(`${API_BASE}/landlord/bookings?landlord_id=${user.id}`);
+        // Fetch landlord bookings using ID
+        return fetch(`${API_BASE}/landlord/bookings?landlord_id=${landlordId}`);
       })
       .then((res) => res.json())
       .then((landlordBookings) => {
@@ -48,15 +60,15 @@ function LandlordDash() {
         console.error("Error loading dashboard:", err);
         setLoading(false);
       });
-  }, []);
+  }, [user, navigate]);
 
-  // Small toast message
+  // ✅ Toast helper
   const showNotification = (message, type = "success") => {
     setNotification({ message, type });
     setTimeout(() => setNotification(null), 2500);
   };
 
-  // Handle Delete
+  // ✅ Delete Property
   const handleDelete = (propertyId) => {
     if (!confirm("Are you sure you want to delete this property?")) return;
 
@@ -74,7 +86,7 @@ function LandlordDash() {
       .catch(() => showNotification("Failed to delete property", "error"));
   };
 
-  // Handle Edit Start
+  // ✅ Start Editing
   const startEditing = (property) => {
     setEditingId(property.id);
     setEditData({
@@ -86,7 +98,7 @@ function LandlordDash() {
     });
   };
 
-  // Handle Edit Submit
+  // ✅ Save Edit
   const saveEdit = (propertyId) => {
     fetch(`${API_BASE}/properties/${propertyId}`, {
       method: "PUT",
@@ -106,7 +118,8 @@ function LandlordDash() {
       })
       .catch(() => showNotification("Error updating property", "error"));
   };
-  // Approve Booking
+
+  // ✅ Approve Booking
   const handleApproveBooking = (bookingId) => {
     fetch(`${API_BASE}/bookings/${bookingId}`, {
       method: "PUT",
@@ -126,7 +139,7 @@ function LandlordDash() {
       .catch(() => showNotification("Error approving booking", "error"));
   };
 
-  // Delete (Decline) Booking
+  // ✅ Delete Booking
   const handleDeleteBooking = (bookingId) => {
     if (!confirm("Are you sure you want to delete this booking?")) return;
 
@@ -150,7 +163,7 @@ function LandlordDash() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6 relative">
-      {/* Toast Notification */}
+      {/* ✅ Toast Notification */}
       {notification && (
         <div
           className={`fixed top-5 right-5 px-4 py-2 rounded-lg text-white shadow-md ${
@@ -161,18 +174,18 @@ function LandlordDash() {
         </div>
       )}
 
-      {/* Header */}
+      {/* ✅ Header */}
       <header className="flex justify-between items-center bg-white p-4 rounded-lg shadow-sm">
         <h1 className="text-2xl font-bold text-gray-800">PropertyHub</h1>
-        {landlord && (
+        {user && (
           <div className="flex items-center space-x-3">
             <p className="text-gray-700">
-              {landlord.name} ({landlord.role})
+              {user.name} ({user.role})
             </p>
             <button
               onClick={() => {
-                localStorage.clear();
-                window.location.href = "/login";
+                logoutUser();
+                navigate("/login");
               }}
               className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-full"
             >
@@ -181,7 +194,8 @@ function LandlordDash() {
           </div>
         )}
       </header>
-      {/* --- Bookings Section --- */}
+
+      {/* ✅ Bookings Section */}
       <section className="bg-white rounded-xl shadow-md p-6 mt-6">
         <h3 className="text-lg font-semibold text-gray-800 mb-3">
           Bookings Overview
@@ -256,9 +270,8 @@ function LandlordDash() {
         )}
       </section>
 
-      {/* Dashboard */}
+      {/* ✅ Properties Section */}
       <main className="mt-6">
-        {/* --- Properties Section --- */}
         <section>
           <div className="flex justify-between items-center mb-4">
             <div>
@@ -287,7 +300,6 @@ function LandlordDash() {
                   className="bg-white rounded-xl shadow-md overflow-hidden flex flex-col"
                 >
                   {editingId === property.id ? (
-                    // Edit Mode
                     <div className="p-4 flex flex-col gap-3">
                       <input
                         type="text"
@@ -361,7 +373,6 @@ function LandlordDash() {
                       </div>
                     </div>
                   ) : (
-                    // View Mode
                     <>
                       <img
                         src={property.image_url || "/placeholder.jpg"}

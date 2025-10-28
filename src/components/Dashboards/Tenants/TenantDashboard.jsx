@@ -13,32 +13,37 @@ function TenantDash() {
 
   // Load tenant + their bookings
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (!storedUser) return;
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+    const email = localStorage.getItem("email");
+    const name = localStorage.getItem("name");
+    const id = localStorage.getItem("id");
 
-    const user = JSON.parse(storedUser);
-    if (user.role !== "tenant") return;
+    // if not logged in or wrong role
+    if (!token || role !== "tenant") {
+      setLoading(false);
+      navigate("/login");
+      return;
+    }
 
+    const user = { token, role, email, name, id };
     setTenant(user);
 
-    // Fetch all data
+    // Fetch data for tenant
     Promise.all([
-      fetch(`${API_BASE}/bookings?tenant_id=${user.id}`).then((res) =>
-        res.json()
-      ),
+      fetch(`${API_BASE}/bookings?tenant_id=${id}`).then((res) => res.json()),
       fetch(`${API_BASE}/properties`).then((res) => res.json()),
     ])
       .then(([tenantBookings, allProperties]) => {
         setBookings(tenantBookings);
         const available = allProperties.filter((p) => p.is_available);
         setAvailableProps(available);
-        setLoading(false);
       })
       .catch((err) => {
         console.error("Error loading tenant dashboard:", err);
-        setLoading(false);
-      });
-  }, []);
+      })
+      .finally(() => setLoading(false));
+  }, [navigate]);
 
   // Notification helper
   const showNotification = (message, type = "success") => {
