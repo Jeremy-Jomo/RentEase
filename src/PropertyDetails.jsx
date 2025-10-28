@@ -121,7 +121,7 @@ const PropertyDetails = () => {
 
             <div className="flex justify-end mt-8">
               <button
-                onClick={() => navigate("/propetylisting")}
+                onClick={() => navigate("/propertylisting")}
                 className="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200"
               >
                 ← Back to Properties
