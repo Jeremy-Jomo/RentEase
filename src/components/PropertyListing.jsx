@@ -1,5 +1,7 @@
 import React from "react";
 import "./PropertyListing.css";
+import logo from "../assets/logo.png";
+
 import { useProperties } from "./pages/context/PropertyContext";
 import { useNavigate } from "react-router-dom";
 import PropertyDetails from "../PropertyDetails";
@@ -9,25 +11,44 @@ const PropertyListing = () => {
   const navigate = useNavigate();
 
   if (loading) {
-    return <div className="loading">Loading properties...</div>;
+    return <div className="loading">getting your properties...</div>;
   }
 
   return (
     <div className="property-page">
       <header className="navbar bg-gray-900 text-white shadow-md">
-        <nav className="navbar-container flex justify-between items-center px-8 py-4">
-          <div className="logo text-2xl font-bold tracking-wide">RentEase</div>
-          <ul className="nav-links flex space-x-8 text-lg">
-            <li className="hover:text-blue-400 cursor-pointer transition-colors duration-200">
-              Home
-            </li>
-            <li className="hover:text-blue-400 cursor-pointer transition-colors duration-200">
-              Properties
-            </li>
-            <li className="hover:text-blue-400 cursor-pointer transition-colors duration-200">
-              Contact
-            </li>
-          </ul>
+        <nav className="absolute top-0 left-0 w-full bg-transparent z-50">
+          <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div className="flex items-center space-x-3">
+              <img src={logo} alt="RentEase Logo" className="h-20 w-auto" />
+              <h1 className="text-black font-bold text-white drop-shadow-lg">
+                RentEase
+              </h1>
+            </div>
+
+            <div className="hidden md:flex space-x-6">
+              <div className="flex space-x-6">
+                <button
+                  onClick={() => navigate("/")}
+                  className="text-black-700 hover:text-black font-medium"
+                >
+                  Home
+                </button>
+                <button className="text-black-700 hover:text-black font-medium">
+                  About
+                </button>
+                <button className="text-black-700 hover:text-black font-medium">
+                  Contact
+                </button>
+              </div>
+              <a
+                onClick={() => navigate("/register")}
+                className="bg-white text-black px-5 py-2 rounded-lg hover:bg-gray-200 transition font-semibold"
+              >
+                Get Started
+              </a>
+            </div>
+          </div>
         </nav>
       </header>
 
