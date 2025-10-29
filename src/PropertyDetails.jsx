@@ -8,6 +8,8 @@ const PropertyDetails = () => {
   const { properties } = useContext(PropertyContext);
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     fetch(`http://localhost:5000/properties/${id}`)
@@ -36,6 +38,41 @@ const PropertyDetails = () => {
         Property not found.
       </div>
     );
+  }
+
+  function handleRentRedirect() {
+    if (!user) {
+      alert("Please log in first!");
+      navigate("/login");
+      return;
+    }
+
+    fetch("http://localhost:5000/bookings", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token ? `Bearer ${token}` : "",
+      },
+      body: JSON.stringify({
+        tenant_id: user.id,
+        property_id: property.id,
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return response.json().then((errorData) => {
+            throw new Error(errorData.error || "Failed to create booking");
+          });
+        }
+        return response.json();
+      })
+      .then((booking) => {
+        navigate(`/rent/${property.id}`, { state: { property, booking } });
+      })
+      .catch((error) => {
+        console.error("Booking error:", error);
+        alert(error.message);
+      });
   }
 
   return (
@@ -119,12 +156,18 @@ const PropertyDetails = () => {
               )}
             </div>
 
-            <div className="flex justify-end mt-8">
+            <div className="flex justify-end mt-8 space-x-4">
               <button
                 onClick={() => navigate("/propertylisting")}
                 className="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200"
               >
                 ← Back to Properties
+              </button>
+              <button
+                onClick={handleRentRedirect}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200"
+              >
+                Request to Rent
               </button>
             </div>
           </div>
