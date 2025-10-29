@@ -1,15 +1,11 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { PropertyContext } from "./PropertyDetailsContext";
 
 const PropertyDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { properties } = useContext(PropertyContext);
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(true);
-  const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     fetch(`http://localhost:5000/properties/${id}`)
@@ -24,148 +20,97 @@ const PropertyDetails = () => {
       });
   }, [id]);
 
-  if (loading) {
+  if (loading)
     return (
-      <div className="text-center py-20 text-lg text-gray-600">
+      <div className="text-center py-20 text-gray-600">
         Loading property details...
       </div>
     );
-  }
-
-  if (!property) {
+  if (!property)
     return (
-      <div className="text-center py-20 text-gray-600 text-lg">
-        Property not found.
-      </div>
+      <div className="text-center py-20 text-gray-600">Property not found.</div>
     );
-  }
 
-  function handleRentRedirect() {
-    if (!user) {
-      alert("Please log in first!");
-      navigate("/login");
-      return;
-    }
-
-    fetch("http://localhost:5000/bookings", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token ? `Bearer ${token}` : "",
-      },
-      body: JSON.stringify({
-        tenant_id: user.id,
-        property_id: property.id,
-      }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          return response.json().then((errorData) => {
-            throw new Error(errorData.error || "Failed to create booking");
-          });
-        }
-        return response.json();
-      })
-      .then((booking) => {
-        navigate(`/rent/${property.id}`, { state: { property, booking } });
-      })
-      .catch((error) => {
-        console.error("Booking error:", error);
-        alert(error.message);
-      });
-  }
+  const handleRentRedirect = () => {
+    // navigate to Rent page, property will be passed via state
+    navigate(`/rent/${property.id}`, { state: { property } });
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900">
-      {/* Navbar */}
       <header className="bg-gray-900 text-white shadow-md fixed top-0 left-0 right-0 z-50">
         <nav className="flex justify-between items-center px-8 py-4">
           <div
-            className="text-2xl font-bold tracking-wide cursor-pointer"
+            className="text-2xl font-bold cursor-pointer"
             onClick={() => navigate("/")}
           >
             RentEase
           </div>
           <ul className="flex space-x-8 text-lg font-medium">
             <li
-              className="hover:text-blue-400 cursor-pointer transition-colors duration-200"
               onClick={() => navigate("/")}
+              className="hover:text-blue-400 cursor-pointer"
             >
               Home
             </li>
             <li
-              className="hover:text-blue-400 cursor-pointer transition-colors duration-200"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/propertylisting")}
+              className="hover:text-blue-400 cursor-pointer"
             >
               Properties
             </li>
-            <li className="hover:text-blue-400 cursor-pointer transition-colors duration-200">
-              Contact
-            </li>
+            <li className="hover:text-blue-400 cursor-pointer">Contact</li>
           </ul>
         </nav>
       </header>
 
-      {/* Main Content */}
       <main className="pt-28 px-6 pb-20 flex justify-center">
         <div className="max-w-5xl w-full bg-white shadow-xl rounded-2xl overflow-hidden">
-          {/* Image */}
           <img
             src={property.image_url}
             alt={property.title}
             className="w-full h-96 object-cover"
           />
-
-          {/* Details */}
           <div className="p-8 space-y-6">
             <h2 className="text-3xl font-bold text-gray-800">
               {property.title}
             </h2>
-
-            <div className="grid sm:grid-cols-2 gap-4">
-              <p className="text-gray-700 text-lg">
-                <strong>Location:</strong> {property.location}
-              </p>
-              <p className="text-gray-700 text-lg">
-                <strong>Price:</strong>{" "}
-                <span className="text-indigo-600 font-semibold">
-                  KSh {property.rent_price}
-                </span>
-              </p>
-            </div>
-
+            <p className="text-gray-700 text-lg">
+              <strong>Location:</strong> {property.location}
+            </p>
+            <p className="text-gray-700 text-lg">
+              <strong>Price:</strong> KSh {property.rent_price}
+            </p>
             <p className="text-gray-700 text-base leading-relaxed">
               {property.description}
             </p>
 
-            <div>
-              <h3 className="text-2xl font-semibold text-gray-800 mb-4">
-                Amenities
-              </h3>
-              {property.amenities && property.amenities.length > 0 ? (
-                <ul className="list-disc list-inside text-gray-700 space-y-2">
-                  {property.amenities.map((a) => (
-                    <li key={a.id}>
-                      <span className="font-medium">{a.amenity_name}</span>:{" "}
-                      {a.description}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-gray-500 italic">No amenities listed.</p>
-              )}
-            </div>
+            <h3 className="text-2xl font-semibold text-gray-800 mb-4">
+              Amenities
+            </h3>
+            {property.amenities?.length > 0 ? (
+              <ul className="list-disc list-inside text-gray-700 space-y-2">
+                {property.amenities.map((a) => (
+                  <li key={a.id}>
+                    <span className="font-medium">{a.amenity_name}</span>:{" "}
+                    {a.description}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-500 italic">No amenities listed.</p>
+            )}
 
             <div className="flex justify-end mt-8 space-x-4">
               <button
                 onClick={() => navigate("/propertylisting")}
-                className="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200"
+                className="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold"
               >
                 ← Back to Properties
               </button>
               <button
                 onClick={handleRentRedirect}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold"
               >
                 Request to Rent
               </button>

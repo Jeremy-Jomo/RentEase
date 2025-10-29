@@ -11,6 +11,8 @@ import AddProperty from "./components/Dashboards/Landlord/AddProperty";
 import TenantDash from "./components/Dashboards/Tenants/TenantDashboard";
 import LandingPage from "./components/pages/landingpage/landingpage";
 import AdminDashboard from "./components/pages/AdminDashboard";
+import Rent from "./components/pages/Rent";
+import Payment from "./components/pages/Payment";
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
           <Route path="/addProperty" element={<AddProperty />} />
           <Route path="/tenant-dashboard" element={<TenantDash />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/rent/:id" element={<Rent />} />
+          <Route path="/payment" element={<Payment />} />
         </Routes>
       </Router>
     </PropertyProvider>

@@ -126,6 +126,16 @@ function Login() {
                   </div>
                 )}
               </div>
+              {/* Footer */}
+              <p className="text-sm text-center text-gray-600 mt-4">
+                No account?{" "}
+                <a
+                  href="/register"
+                  className="font-semibold text-black hover:text-gray-700 underline"
+                >
+                  Create account
+                </a>
+              </p>
 
               <button
                 type="submit"
