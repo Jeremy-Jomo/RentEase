@@ -176,7 +176,7 @@ function LandlordDash() {
 
       {/* ✅ Header */}
       <header className="flex justify-between items-center bg-white p-4 rounded-lg shadow-sm">
-        <h1 className="text-2xl font-bold text-gray-800">PropertyHub</h1>
+        <h1 className="text-2xl font-bold text-gray-800">LandlordDash</h1>
         {user && (
           <div className="flex items-center space-x-3">
             <p className="text-gray-700">

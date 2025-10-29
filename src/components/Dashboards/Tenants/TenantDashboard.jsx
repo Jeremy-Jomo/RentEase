@@ -129,11 +129,12 @@ const TenantDash = () => {
 
       {/* Header */}
       <header className="flex justify-between items-center bg-white p-4 rounded-lg shadow-sm sticky top-0 z-10">
-        <h1 className="text-2xl font-bold text-gray-800">🏠 PropertyHub</h1>
+        <h1 className="text-2xl font-bold text-gray-800"> TenantDash</h1>
         {tenant && (
           <div className="flex items-center space-x-3">
             <p className="text-gray-700 font-medium">
-              {tenant.name} <span className="text-gray-500">({tenant.role})</span>
+              {tenant.name}{" "}
+              <span className="text-gray-500">({tenant.role})</span>
             </p>
             <button
               onClick={handleLogout}
@@ -199,9 +200,13 @@ const TenantDash = () => {
 
       {/* My Bookings */}
       <section className="bg-white rounded-xl shadow-md p-6 mt-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-3">My Bookings</h3>
+        <h3 className="text-lg font-semibold text-gray-800 mb-3">
+          My Bookings
+        </h3>
         {bookings.length === 0 ? (
-          <p className="text-gray-600 italic">You haven’t made any bookings yet.</p>
+          <p className="text-gray-600 italic">
+            You haven’t made any bookings yet.
+          </p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {bookings.map((b) => (
@@ -245,7 +250,9 @@ const TenantDash = () => {
                   </button>
                 )}
                 {b.status === "active" && (
-                  <p className="mt-3 text-green-700 font-semibold">Payment completed</p>
+                  <p className="mt-3 text-green-700 font-semibold">
+                    Payment completed
+                  </p>
                 )}
               </div>
             ))}
@@ -259,7 +266,9 @@ const TenantDash = () => {
           Available Properties
         </h2>
         {filteredProps.length === 0 ? (
-          <p className="text-gray-600 italic">No properties match your filters.</p>
+          <p className="text-gray-600 italic">
+            No properties match your filters.
+          </p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProps.map((property) => (
@@ -274,7 +283,9 @@ const TenantDash = () => {
                       : "bg-red-100 text-red-700"
                   }`}
                 >
-                  {property.is_available || property.available ? "Available" : "Unavailable"}
+                  {property.is_available || property.available
+                    ? "Available"
+                    : "Unavailable"}
                 </div>
                 <img
                   src={property.image_url || "/placeholder.jpg"}
@@ -286,8 +297,12 @@ const TenantDash = () => {
                     <h3 className="text-lg font-semibold text-gray-800 mb-1">
                       {property.title}
                     </h3>
-                    <p className="text-gray-600 text-sm mb-2">{property.location}</p>
-                    <p className="text-gray-700 text-sm line-clamp-2">{property.description}</p>
+                    <p className="text-gray-600 text-sm mb-2">
+                      {property.location}
+                    </p>
+                    <p className="text-gray-700 text-sm line-clamp-2">
+                      {property.description}
+                    </p>
                   </div>
                   <div className="flex justify-between items-center mt-4">
                     <span className="text-xl font-bold text-gray-800">
@@ -295,7 +310,9 @@ const TenantDash = () => {
                     </span>
                     <button
                       onClick={() =>
-                        navigate(`/property/${property.id}`, { state: { property } })
+                        navigate(`/property/${property.id}`, {
+                          state: { property },
+                        })
                       }
                       className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium"
                     >
