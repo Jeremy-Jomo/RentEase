@@ -23,19 +23,19 @@ function AdminDashboard() {
     }
 
     Promise.all([
-      fetch("http://127.0.0.1:5000/admin/users", {
+      fetch("https://renteasebackend-1.onrender.com/admin/users", {
         headers: { Authorization: `Bearer ${token}` },
       })
         .then((res) => res.json())
         .then((data) => setUsers(data))
         .catch((err) => console.error("Error fetching users:", err)),
 
-      fetch("http://127.0.0.1:5000/properties")
+      fetch("https://renteasebackend-1.onrender.com/properties")
         .then((res) => res.json())
         .then((data) => setProperties(data))
         .catch((err) => console.error("Error fetching properties:", err)),
 
-      fetch("http://127.0.0.1:5000/admin/bookings", {
+      fetch("https://renteasebackend-1.onrender.com/admin/bookings", {
         headers: { Authorization: `Bearer ${token}` },
       })
         .then((res) => res.json())
@@ -59,7 +59,7 @@ function AdminDashboard() {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
 
     try {
-      const res = await fetch(`http://127.0.0.1:5000/admin/users/${userId}`, {
+      const res = await fetch(`https://renteasebackend-1.onrender.com/admin/users/${userId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -79,7 +79,7 @@ function AdminDashboard() {
     if (!window.confirm("Are you sure you want to delete this property?")) return;
 
     try {
-      const res = await fetch(`http://127.0.0.1:5000/properties/${propertyId}`, {
+      const res = await fetch(`https://renteasebackend-1.onrender.com/properties/${propertyId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });

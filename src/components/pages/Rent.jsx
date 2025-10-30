@@ -30,7 +30,7 @@ function Rent() {
   }, [user, navigate]);
 
   const handleRent = () => {
-    fetch("http://localhost:5000/bookings", {
+    fetch("https://renteasebackend-1.onrender.com/bookings", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

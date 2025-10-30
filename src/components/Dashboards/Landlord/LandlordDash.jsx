@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../pages/context/UserContext";
 
-const API_BASE = "http://127.0.0.1:5000";
+const API_BASE = "https://renteasebackend-1.onrender.com";
 
 function LandlordDash() {
   const navigate = useNavigate();
