@@ -53,6 +53,46 @@ function AdminDashboard() {
     navigate("/login");
   };
 
+
+  const handleDeleteUser = async (userId) => {
+    const token = user?.token || localStorage.getItem("token");
+    if (!window.confirm("Are you sure you want to delete this user?")) return;
+
+    try {
+      const res = await fetch(`http://127.0.0.1:5000/admin/users/${userId}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        setUsers(users.filter((u) => u.id !== userId));
+      } else {
+        console.error("Failed to delete user");
+      }
+    } catch (err) {
+      console.error("Error deleting user:", err);
+    }
+  };
+
+
+  const handleDeleteProperty = async (propertyId) => {
+    const token = user?.token || localStorage.getItem("token");
+    if (!window.confirm("Are you sure you want to delete this property?")) return;
+
+    try {
+      const res = await fetch(`http://127.0.0.1:5000/properties/${propertyId}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        setProperties(properties.filter((p) => p.id !== propertyId));
+      } else {
+        console.error("Failed to delete property");
+      }
+    } catch (err) {
+      console.error("Error deleting property:", err);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen text-lg text-gray-600">
@@ -145,6 +185,7 @@ function AdminDashboard() {
                   <th className="py-3 px-4">Email</th>
                   <th className="py-3 px-4">Role</th>
                   <th className="py-3 px-4">Date Joined</th>
+                  <th className="py-3 px-4 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -158,6 +199,14 @@ function AdminDashboard() {
                     <td className="py-3 px-4 capitalize">{u.role}</td>
                     <td className="py-3 px-4">
                       {new Date(u.created_at).toLocaleDateString()}
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      <button
+                        onClick={() => handleDeleteUser(u.id)}
+                        className="bg-red-600 text-white px-3 py-1 rounded-md hover:bg-red-700 transition"
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -179,6 +228,7 @@ function AdminDashboard() {
                   <th className="py-3 px-4">Price</th>
                   <th className="py-3 px-4">Landlord Name</th>
                   <th className="py-3 px-4">Status</th>
+                  <th className="py-3 px-4 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -193,6 +243,14 @@ function AdminDashboard() {
                     <td className="py-3 px-4">{p.landlord_name}</td>
                     <td className="py-3 px-4">
                       {p.available ? "Available" : "Unavailable"}
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      <button
+                        onClick={() => handleDeleteProperty(p.id)}
+                        className="bg-red-600 text-white px-3 py-1 rounded-md hover:bg-red-700 transition"
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 ))}
