@@ -18,6 +18,7 @@ function Payment() {
   });
 
   const [message, setMessage] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (property) {
@@ -31,6 +32,11 @@ function Payment() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (submitting) return;
+    setSubmitting(true);
+    setMessage("Processing payment...");
+
     fetch("https://renteasebackend-1.onrender.com/payments", {
       method: "POST",
       headers: {
@@ -44,12 +50,32 @@ function Payment() {
         payment_method: "digital_wallet",
       }),
     })
-      .then((res) => res.json())
-      .then(() => {
-        setMessage("Payment successful! Redirecting to dashboard...");
+      .then((res) => {
+        if (!res.ok) {
+          return res.json().then((err) => {
+            // backend may return an error message
+            throw new Error(err.error || err.message || "Payment failed");
+          });
+        }
+        return res.json();
+      })
+      .then((data) => {
+        // >>> Added code starts
+        // Use message from server if present and navigate with refresh flag
+        setMessage(
+          data?.message ? `${data.message} Redirecting to dashboard...` : "Payment successful! Redirecting..."
+        );
+        // <<< Added code ends
+
+        // Give UI time to show success and then return to tenant dashboard
         setTimeout(() => {
           navigate("/tenant-dashboard", { state: { refresh: true } });
-        }, 2000);
+        }, 1200);
+      })
+      .catch((err) => {
+        console.error("Payment error:", err);
+        setMessage(err.message || "Payment failed. Try again.");
+        setSubmitting(false);
       });
   };
 
@@ -128,9 +154,10 @@ function Payment() {
 
         <button
           type="submit"
-          className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold"
+          disabled={submitting}
+          className={`w-full ${submitting ? "opacity-60 cursor-not-allowed" : ""} bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold`}
         >
-          Pay Now
+          {submitting ? "Processing..." : "Pay Now"}
         </button>
       </form>
 
