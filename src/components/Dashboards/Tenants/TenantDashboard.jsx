@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const API_BASE = "http://127.0.0.1:5000";
+const API_BASE = "https://renteasebackend-1.onrender.com";
 
 const TenantDash = () => {
   const navigate = useNavigate();

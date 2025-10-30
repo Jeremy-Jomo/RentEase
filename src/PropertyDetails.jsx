@@ -8,7 +8,7 @@ const PropertyDetails = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/properties/${id}`)
+    fetch(`https://renteasebackend-1.onrender.com/properties/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setProperty(data);

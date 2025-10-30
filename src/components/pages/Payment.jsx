@@ -31,7 +31,7 @@ function Payment() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch("http://localhost:5000/payments", {
+    fetch("https://renteasebackend-1.onrender.com/payments", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

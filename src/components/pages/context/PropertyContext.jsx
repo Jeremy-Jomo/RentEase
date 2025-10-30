@@ -8,7 +8,7 @@ export const PropertyProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:5000/properties")
+    fetch("https://renteasebackend-1.onrender.com/properties")
       .then((res) => res.json())
       .then((data) => {
         setProperties(data);
