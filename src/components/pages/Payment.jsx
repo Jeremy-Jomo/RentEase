@@ -46,28 +46,29 @@ function Payment() {
       body: JSON.stringify({
         booking_id: bookingId,
         tenant_id: user.id,
-        amount: formData.amount,
+        amount: Number(formData.amount),
         payment_method: "digital_wallet",
       }),
     })
-      .then((res) => {
-        if (!res.ok) {
-          return res.json().then((err) => {
-            // backend may return an error message
-            throw new Error(err.error || err.message || "Payment failed");
-          });
-        }
-        return res.json();
-      })
+      .then((res) =>
+        res.text().then((text) => {
+          let data;
+          try {
+            data = JSON.parse(text);
+          } catch {
+            throw new Error("Server returned non-JSON response");
+          }
+          if (!res.ok) throw new Error(data.error || data.message || "Payment failed");
+          return data;
+        })
+      )
       .then((data) => {
-        // >>> Added code starts
-        // Use message from server if present and navigate with refresh flag
         setMessage(
-          data?.message ? `${data.message} Redirecting to dashboard...` : "Payment successful! Redirecting..."
+          data?.message
+            ? `${data.message} Redirecting to dashboard...`
+            : "Payment successful! Redirecting..."
         );
-        // <<< Added code ends
 
-        // Give UI time to show success and then return to tenant dashboard
         setTimeout(() => {
           navigate("/tenant-dashboard", { state: { refresh: true } });
         }, 1200);
