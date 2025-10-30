@@ -1,11 +1,13 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom"; // if using React Router
+import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { UserContext } from "../../pages/context/UserContext";
 
 function Login() {
-  const navigate = useNavigate(); // React Router v6 hook
+  const navigate = useNavigate();
   const [loginError, setLoginError] = useState("");
+  const { loginUser } = useContext(UserContext);
 
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -16,10 +18,10 @@ function Login() {
       .required("Password is required"),
   });
 
-  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+  const handleSubmit = async (values, { setSubmitting }) => {
     setLoginError("");
     try {
-      const response = await fetch("http://127.0.0.1:5000/login", {
+      const response = await fetch("https://renteasebackend-1.onrender.com/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
@@ -28,12 +30,16 @@ function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        // Save token and role
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("role", data.role); // make sure the backend returns the role
+        loginUser({
+          id: data.user?.id,
+          token: data.token,
+          role: data.user?.role,
+          email: data.user?.email,
+          name: data.user?.name,
+        });
 
-        // Redirect based on role
-        switch (data.role) {
+        // ✅ Role-based redirect
+        switch (data.user?.role) {
           case "admin":
             navigate("/admin-dashboard");
             break;
@@ -54,12 +60,19 @@ function Login() {
       setLoginError("Something went wrong.");
     } finally {
       setSubmitting(false);
-      resetForm();
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-white">
+    <div className="flex items-center justify-center min-h-screen bg-gray-50 relative">
+      {/* 🏠 Back to Home Button */}
+      <button
+        onClick={() => navigate("/")}
+        className="absolute top-6 left-6 bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition duration-300"
+      >
+        ← Back to Home
+      </button>
+
       <div className="w-full max-w-md bg-white text-black rounded-3xl shadow-2xl border border-gray-300 p-10">
         <div className="text-center mb-4">
           <h2 className="text-3xl font-extrabold">Welcome Back 👋</h2>
@@ -112,7 +125,7 @@ function Login() {
                 />
 
                 {loginError && (
-                  <div className="mb-4 text-sm text-red-600 font-semibold text-center">
+                  <div className="mt-3 text-sm text-red-600 font-semibold text-center">
                     {loginError}
                   </div>
                 )}
@@ -125,6 +138,16 @@ function Login() {
               >
                 {isSubmitting ? "Logging in..." : "Login"}
               </button>
+
+              <p className="text-sm text-center text-gray-600 mt-4">
+                No account?{" "}
+                <a
+                  href="/register"
+                  className="font-semibold text-black hover:text-gray-700 underline"
+                >
+                  Create account
+                </a>
+              </p>
             </Form>
           )}
         </Formik>

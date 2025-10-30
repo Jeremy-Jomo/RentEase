@@ -1,13 +1,13 @@
 import React from "react";
 import logo from "../../../assets/logo.png";
+import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-white font-sans text-gray-900">
-      
       <nav className="absolute top-0 left-0 w-full bg-transparent z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          
           <div className="flex items-center space-x-3">
             <img src={logo} alt="RentEase Logo" className="h-20 w-auto" />
             <h1 className="text-black font-bold text-white drop-shadow-lg">
@@ -15,24 +15,55 @@ const LandingPage = () => {
             </h1>
           </div>
 
-          
-          <div className="hidden md:flex space-x-6">
+          <div className="hidden md:flex space-x-6 items-center">
             <div className="flex space-x-6">
-                <button className="text-black-700 hover:text-black font-medium">Home</button>
-                <button className="text-black-700 hover:text-black font-medium">About</button>
-                <button className="text-black-700 hover:text-black font-medium">Contact</button>
-           </div>
-            <a
-              href="#"
-              className="bg-white text-black px-5 py-2 rounded-lg hover:bg-gray-200 transition font-semibold"
-            >
-              Get Started
-            </a>
+              <button
+                onClick={() => navigate("/")}
+                className="text-black hover:text-gray-800 font-medium"
+              >
+                Home
+              </button>
+              <button
+                onClick={() => {
+                  const aboutSection = document.getElementById("about");
+                  if (aboutSection)
+                    aboutSection.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="text-black hover:text-gray-800 font-medium"
+              >
+                About
+              </button>
+              <button
+                onClick={() => {
+                  const contactSection = document.getElementById("contact");
+                  if (contactSection)
+                    contactSection.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="text-black hover:text-gray-800 font-medium"
+              >
+                Contact
+              </button>
+            </div>
+
+            {/* 👇 Added Login & Get Started Buttons */}
+            <div className="flex space-x-4">
+              <button
+                onClick={() => navigate("/login")}
+                className="border border-black text-black px-5 py-2 rounded-lg hover:bg-gray-100 transition font-semibold"
+              >
+                Login
+              </button>
+              <button
+                onClick={() => navigate("/register")}
+                className="bg-black text-white px-5 py-2 rounded-lg hover:bg-gray-800 transition font-semibold"
+              >
+                Get Started
+              </button>
+            </div>
           </div>
         </div>
       </nav>
 
-      
       <section className="relative h-screen flex items-center justify-center">
         <img
           src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1600"
@@ -50,14 +81,13 @@ const LandingPage = () => {
             comfort in every move.
           </p>
           <a
-            href="#services"
+            onClick={() => navigate("/propertylisting")}
             className="bg-white text-black px-8 py-3 rounded-lg font-semibold hover:bg-gray-200 transition"
           >
             Explore Now
           </a>
         </div>
       </section>
-
 
       <section className="py-20 bg-gray-50" id="about">
         <div className="max-w-6xl mx-auto px-6 text-center">
@@ -95,7 +125,6 @@ const LandingPage = () => {
         </div>
       </section>
 
-      
       <section className="py-20">
         <div className="max-w-6xl mx-auto px-6 text-center">
           <h2 className="text-3xl font-bold mb-10 text-gray-900">
@@ -108,14 +137,15 @@ const LandingPage = () => {
               className="w-full md:w-1/2 h-80 object-cover"
             />
             <div className="p-8 text-left md:w-1/2">
-              <h3 className="text-2xl font-semibold text-black mb-3">
-                Luxury 
-              </h3>
+              <h3 className="text-2xl font-semibold text-black mb-3">Luxury</h3>
               <p className="text-gray-700 mb-4">
                 A beautiful apartment located in a serene neighborhood with
                 modern amenities and high security standards.
               </p>
-              <button className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition">
+              <button
+                onClick={() => navigate("/propertylisting")}
+                className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition"
+              >
                 Explore Properties
               </button>
             </div>
@@ -123,14 +153,12 @@ const LandingPage = () => {
         </div>
       </section>
 
-    
       <section id="contact" className="py-20 bg-pink-100">
         <div className="max-w-6xl mx-auto px-6 text-center">
           <h2 className="text-3xl font-bold text-gray-900 mb-10">
             Get in Touch
           </h2>
           <div className="bg-white p-8 rounded-2xl shadow-md max-w-2xl mx-auto">
-            
             <p className="text-gray-700">
               <strong>Email:</strong> support@rentease.com
             </p>
@@ -140,16 +168,14 @@ const LandingPage = () => {
             <p className="text-gray-700">
               <strong>Location:</strong> Nairobi, Kenya
             </p>
-            
           </div>
         </div>
       </section>
 
-      
       <footer className="bg-black text-white py-10">
         <div className="max-w-6xl mx-auto px-6 text-center">
           <h3 className="text-xl font-semibold mb-3">RentEase</h3>
-          
+
           <p className="text-white/50 text-sm">
             © {new Date().getFullYear()} RentEase. All rights reserved.
           </p>

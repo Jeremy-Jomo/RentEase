@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
 function Register() {
+  const navigate = useNavigate();
   const [registerError, setRegisterError] = useState("");
   const [registerSuccess, setRegisterSuccess] = useState("");
 
@@ -27,8 +29,9 @@ function Register() {
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     setRegisterError("");
     setRegisterSuccess("");
+
     try {
-      const response = await fetch("http://127.0.0.1:5000/register", {
+      const response = await fetch("https://renteasebackend-1.onrender.com/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -57,11 +60,20 @@ function Register() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-white">
-      <div className="w-full max-w-md bg-white text-black rounded-3xl shadow-2xl border border-gray-300 p-10">
+      <div className="w-full max-w-md bg-white text-black rounded-3xl shadow-2xl border border-gray-300 p-10 relative">
+        {/* 🔙 Back Button */}
+        <button
+          type="button"
+          onClick={() => navigate(-1)}
+          className="absolute top-5 left-5 text-gray-600 hover:text-black font-medium transition"
+        >
+          ← Back
+        </button>
+
         {/* Header */}
-        <div className="text-center mb-4">
+        <div className="text-center mb-6 mt-2">
           <h2 className="text-3xl font-extrabold">Create Account ✨</h2>
-          <p className="text-sm text-gray-600 mt-2">Sign up to get started</p>
+          <p className="text-sm text-gray-600 mt-2">Join RentEase today</p>
         </div>
 
         <Formik
@@ -76,15 +88,17 @@ function Register() {
           onSubmit={handleSubmit}
         >
           {({ isSubmitting }) => (
-            <Form className="space-y-6">
+            <Form className="space-y-5">
               {/* Name */}
               <div>
-                <label className="block mb-2 text-sm font-medium">Name</label>
+                <label className="block mb-2 text-sm font-medium">
+                  Full Name
+                </label>
                 <Field
                   name="name"
                   type="text"
-                  placeholder="John Doe"
-                  className="w-full px-4 py-2 rounded-lg bg-gray-100 text-black placeholder-gray-500 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all"
+                  placeholder="Jane Doe"
+                  className="w-full px-4 py-2 rounded-lg bg-gray-100 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all"
                 />
                 <ErrorMessage
                   name="name"
@@ -95,14 +109,12 @@ function Register() {
 
               {/* Email */}
               <div>
-                <label className="block mb-2 text-sm font-medium">
-                  Email Address
-                </label>
+                <label className="block mb-2 text-sm font-medium">Email</label>
                 <Field
                   name="email"
                   type="email"
                   placeholder="you@example.com"
-                  className="w-full px-4 py-2 rounded-lg bg-gray-100 text-black placeholder-gray-500 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all"
+                  className="w-full px-4 py-2 rounded-lg bg-gray-100 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all"
                 />
                 <ErrorMessage
                   name="email"
@@ -120,7 +132,7 @@ function Register() {
                   name="password"
                   type="password"
                   placeholder="••••••••"
-                  className="w-full px-4 py-2 rounded-lg bg-gray-100 text-black placeholder-gray-500 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all"
+                  className="w-full px-4 py-2 rounded-lg bg-gray-100 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all"
                 />
                 <ErrorMessage
                   name="password"
@@ -138,7 +150,7 @@ function Register() {
                   name="confirmPassword"
                   type="password"
                   placeholder="••••••••"
-                  className="w-full px-4 py-2 rounded-lg bg-gray-100 text-black placeholder-gray-500 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all"
+                  className="w-full px-4 py-2 rounded-lg bg-gray-100 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all"
                 />
                 <ErrorMessage
                   name="confirmPassword"
@@ -147,13 +159,15 @@ function Register() {
                 />
               </div>
 
-              {/* Role Selector */}
+              {/* Role */}
               <div>
-                <label className="block mb-2 text-sm font-medium">Role</label>
+                <label className="block mb-2 text-sm font-medium">
+                  Register As
+                </label>
                 <Field
-                  name="role"
                   as="select"
-                  className="w-full px-4 py-2 rounded-lg bg-gray-100 text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all"
+                  name="role"
+                  className="w-full px-4 py-2 rounded-lg bg-gray-100 border border-gray-300 text-black focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all"
                 >
                   <option value="">Select Role</option>
                   <option value="admin">Admin</option>
@@ -171,18 +185,19 @@ function Register() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-2 font-semibold text-white bg-black rounded-lg hover:bg-gray-800 focus:ring-4 focus:ring-gray-600 transition duration-300 shadow-md"
+                className="w-full py-2 mt-3 font-semibold text-white bg-black rounded-lg hover:bg-gray-800 focus:ring-4 focus:ring-gray-600 transition duration-300 shadow-md"
               >
                 {isSubmitting ? "Registering..." : "Register"}
               </button>
-              {/* Error & Success */}
+
+              {/* Feedback */}
               {registerError && (
-                <div className="mb-4 text-sm text-red-600 font-semibold text-center">
+                <div className="text-sm text-red-600 font-semibold text-center mt-3">
                   {registerError}
                 </div>
               )}
               {registerSuccess && (
-                <div className="mb-4 text-sm text-green-600 font-semibold text-center">
+                <div className="text-sm text-green-600 font-semibold text-center mt-3">
                   {registerSuccess}
                 </div>
               )}
