@@ -30,14 +30,18 @@ const AddProperty = () => {
 
     const payload = {
       ...values,
-      landlord_id: JSON.parse(localStorage.getItem("user"))?.id,
+      landlord_id: Number(localStorage.getItem("id")),
     };
+    console.log("Payload being sent:", payload);
 
-    const response = await fetch("https://renteasebackend-1.onrender.com/properties", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+    const response = await fetch(
+      "https://renteasebackend-1.onrender.com/properties",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      }
+    );
 
     const data = await response.json();
 
