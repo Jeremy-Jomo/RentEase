@@ -12,6 +12,7 @@ const TenantDash = () => {
   const [filteredProps, setFilteredProps] = useState([]);
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState(null);
+  const [confirmDelete, setConfirmDelete] = useState(null);
 
   const [filters, setFilters] = useState({
     location: "",
@@ -20,26 +21,26 @@ const TenantDash = () => {
     availableOnly: true,
   });
 
-  // Fetch bookings & properties
-  const fetchData = async () => {
+  const showNotification = (message, type = "success") => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 2500);
+  };
+
+  const fetchData = () => {
     const tenantId = localStorage.getItem("id");
 
-    try {
-      const [bookingsRes, propertiesRes] = await Promise.all([
-        fetch(`${API_BASE}/bookings?tenant_id=${tenantId}`).then((res) =>
-          res.json()
-        ),
-        fetch(`${API_BASE}/properties`).then((res) => res.json()),
-      ]);
-
-      setBookings(bookingsRes || []);
-      setAvailableProps(propertiesRes || []);
-      setFilteredProps(propertiesRes || []);
-    } catch (err) {
-      showNotification("Failed to load data", "error");
-    } finally {
-      setLoading(false);
-    }
+    Promise.all([
+      fetch(`${API_BASE}/bookings?tenant_id=${tenantId}`).then((res) =>
+        res.json()
+      ),
+      fetch(`${API_BASE}/properties`).then((res) => res.json()),
+    ])
+      .then(([bookingsRes, propertiesRes]) => {
+        setBookings(bookingsRes || []);
+        setAvailableProps(propertiesRes || []);
+        setFilteredProps(propertiesRes || []);
+      })
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
@@ -57,21 +58,32 @@ const TenantDash = () => {
     fetchData();
   }, [navigate, location.state?.refresh]);
 
-  const showNotification = (message, type = "success") => {
-    setNotification({ message, type });
-    setTimeout(() => setNotification(null), 2500);
-  };
-
   const handleLogout = () => {
     localStorage.clear();
     showNotification("Logged out successfully!");
     setTimeout(() => navigate("/login"), 1000);
   };
 
-  // Apply filters
+  const confirmBookingDeletion = (booking) => {
+    setConfirmDelete(booking);
+  };
+
+  const handleDeleteBooking = (bookingId) => {
+    fetch(`${API_BASE}/bookings/${bookingId}`, { method: "DELETE" }).then(
+      (res) => {
+        if (res.ok) {
+          setBookings((prev) => prev.filter((b) => b.id !== bookingId));
+          showNotification("Booking deleted successfully!");
+        } else {
+          showNotification("Failed to delete booking", "error");
+        }
+        setConfirmDelete(null);
+      }
+    );
+  };
+
   const applyFilters = () => {
     let filtered = [...availableProps];
-
     if (filters.location) {
       filtered = filtered.filter((p) =>
         p.location?.toLowerCase().includes(filters.location.toLowerCase())
@@ -90,11 +102,9 @@ const TenantDash = () => {
     if (filters.availableOnly) {
       filtered = filtered.filter((p) => p.is_available || p.available);
     }
-
     setFilteredProps(filtered);
   };
 
-  // Run filter when filters or availableProps change
   useEffect(() => {
     applyFilters();
   }, [filters, availableProps]);
@@ -117,6 +127,7 @@ const TenantDash = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6 relative">
+      {/* Notification */}
       {notification && (
         <div
           className={`fixed top-5 right-5 px-4 py-2 rounded-lg text-white shadow-md ${
@@ -127,9 +138,41 @@ const TenantDash = () => {
         </div>
       )}
 
+      {/* Delete Confirmation Popup */}
+      {confirmDelete && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 w-96 shadow-lg text-center">
+            <h3 className="text-lg font-semibold mb-3 text-gray-800">
+              Delete Booking
+            </h3>
+            <p className="text-gray-600 mb-5">
+              Are you sure you want to delete your booking for{" "}
+              <span className="font-semibold">
+                {confirmDelete.property?.title}
+              </span>
+              ?
+            </p>
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() => setConfirmDelete(null)}
+                className="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleDeleteBooking(confirmDelete.id)}
+                className="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <header className="flex justify-between items-center bg-white p-4 rounded-lg shadow-sm sticky top-0 z-10">
-        <h1 className="text-2xl font-bold text-gray-800"> TenantDash</h1>
+        <h1 className="text-2xl font-bold text-gray-800">TenantDash</h1>
         {tenant && (
           <div className="flex items-center space-x-3">
             <p className="text-gray-700 font-medium">
@@ -146,7 +189,7 @@ const TenantDash = () => {
         )}
       </header>
 
-      {/* Filter Controls */}
+      {/* Filters */}
       <section className="bg-white rounded-xl shadow-md p-6 mt-6">
         <h2 className="text-lg font-semibold text-gray-800 mb-3">
           Filter Properties
@@ -198,7 +241,7 @@ const TenantDash = () => {
         </div>
       </section>
 
-      {/* My Bookings */}
+      {/* Bookings */}
       <section className="bg-white rounded-xl shadow-md p-6 mt-6">
         <h3 className="text-lg font-semibold text-gray-800 mb-3">
           My Bookings
@@ -212,7 +255,7 @@ const TenantDash = () => {
             {bookings.map((b) => (
               <div
                 key={b.id}
-                className="bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm"
+                className="bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm relative"
               >
                 <h4 className="font-semibold text-gray-800">
                   {b.property?.title || "Unnamed Property"}
@@ -237,6 +280,7 @@ const TenantDash = () => {
                     {b.status}
                   </span>
                 </p>
+
                 {b.status === "approved" && (
                   <button
                     onClick={() =>
@@ -254,13 +298,20 @@ const TenantDash = () => {
                     Payment completed
                   </p>
                 )}
+
+                <button
+                  onClick={() => confirmBookingDeletion(b)}
+                  className="absolute top-3 right-3 bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-1 rounded-full"
+                >
+                  Delete
+                </button>
               </div>
             ))}
           </div>
         )}
       </section>
 
-      {/* Filtered Properties */}
+      {/* Properties */}
       <section className="bg-white rounded-xl shadow-md p-6 mt-6">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">
           Available Properties

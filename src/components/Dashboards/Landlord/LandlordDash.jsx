@@ -176,7 +176,18 @@ function LandlordDash() {
 
       {/* ✅ Header */}
       <header className="flex justify-between items-center bg-white p-4 rounded-lg shadow-sm">
-        <h1 className="text-2xl font-bold text-gray-800">LandlordDash</h1>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => navigate("/")}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm"
+          >
+            ← Back to Home
+          </button>
+          <h1 className="text-2xl font-bold text-gray-800">
+            Landlord Dashboard
+          </h1>
+        </div>
+
         {user && (
           <div className="flex items-center space-x-3">
             <p className="text-gray-700">

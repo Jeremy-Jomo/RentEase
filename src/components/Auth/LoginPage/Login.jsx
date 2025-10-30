@@ -1,12 +1,11 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom"; // if using React Router
+import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useContext } from "react";
 import { UserContext } from "../../pages/context/UserContext";
 
 function Login() {
-  const navigate = useNavigate(); // React Router v6 hook
+  const navigate = useNavigate();
   const [loginError, setLoginError] = useState("");
   const { loginUser } = useContext(UserContext);
 
@@ -19,7 +18,7 @@ function Login() {
       .required("Password is required"),
   });
 
-  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+  const handleSubmit = async (values, { setSubmitting }) => {
     setLoginError("");
     try {
       const response = await fetch("http://127.0.0.1:5000/login", {
@@ -31,7 +30,6 @@ function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        // Save user info globally
         loginUser({
           id: data.user?.id,
           token: data.token,
@@ -40,9 +38,7 @@ function Login() {
           name: data.user?.name,
         });
 
-        console.log("User saved:", data);
-
-        // Redirect based on role
+        // ✅ Role-based redirect
         switch (data.user?.role) {
           case "admin":
             navigate("/admin-dashboard");
@@ -68,7 +64,15 @@ function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-white">
+    <div className="flex items-center justify-center min-h-screen bg-gray-50 relative">
+      {/* 🏠 Back to Home Button */}
+      <button
+        onClick={() => navigate("/")}
+        className="absolute top-6 left-6 bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition duration-300"
+      >
+        ← Back to Home
+      </button>
+
       <div className="w-full max-w-md bg-white text-black rounded-3xl shadow-2xl border border-gray-300 p-10">
         <div className="text-center mb-4">
           <h2 className="text-3xl font-extrabold">Welcome Back 👋</h2>
@@ -121,12 +125,20 @@ function Login() {
                 />
 
                 {loginError && (
-                  <div className="mb-4 text-sm text-red-600 font-semibold text-center">
+                  <div className="mt-3 text-sm text-red-600 font-semibold text-center">
                     {loginError}
                   </div>
                 )}
               </div>
-              {/* Footer */}
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full py-2 font-semibold text-white bg-black rounded-lg hover:bg-gray-800 focus:ring-4 focus:ring-gray-600 transition duration-300 shadow-md"
+              >
+                {isSubmitting ? "Logging in..." : "Login"}
+              </button>
+
               <p className="text-sm text-center text-gray-600 mt-4">
                 No account?{" "}
                 <a
@@ -136,14 +148,6 @@ function Login() {
                   Create account
                 </a>
               </p>
-
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full py-2 font-semibold text-white bg-black rounded-lg hover:bg-gray-800 focus:ring-4 focus:ring-gray-600 transition duration-300 shadow-md"
-              >
-                {isSubmitting ? "Logging in..." : "Login"}
-              </button>
             </Form>
           )}
         </Formik>

@@ -15,27 +15,51 @@ const LandingPage = () => {
             </h1>
           </div>
 
-          <div className="hidden md:flex space-x-6">
+          <div className="hidden md:flex space-x-6 items-center">
             <div className="flex space-x-6">
               <button
                 onClick={() => navigate("/")}
-                className="text-black-700 hover:text-black font-medium"
+                className="text-black hover:text-gray-800 font-medium"
               >
                 Home
               </button>
-              <button className="text-black-700 hover:text-black font-medium">
+              <button
+                onClick={() => {
+                  const aboutSection = document.getElementById("about");
+                  if (aboutSection)
+                    aboutSection.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="text-black hover:text-gray-800 font-medium"
+              >
                 About
               </button>
-              <button className="text-black-700 hover:text-black font-medium">
+              <button
+                onClick={() => {
+                  const contactSection = document.getElementById("contact");
+                  if (contactSection)
+                    contactSection.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="text-black hover:text-gray-800 font-medium"
+              >
                 Contact
               </button>
             </div>
-            <a
-              onClick={() => navigate("/register")}
-              className="bg-white text-black px-5 py-2 rounded-lg hover:bg-gray-200 transition font-semibold"
-            >
-              Get Started
-            </a>
+
+            {/* 👇 Added Login & Get Started Buttons */}
+            <div className="flex space-x-4">
+              <button
+                onClick={() => navigate("/login")}
+                className="border border-black text-black px-5 py-2 rounded-lg hover:bg-gray-100 transition font-semibold"
+              >
+                Login
+              </button>
+              <button
+                onClick={() => navigate("/register")}
+                className="bg-black text-white px-5 py-2 rounded-lg hover:bg-gray-800 transition font-semibold"
+              >
+                Get Started
+              </button>
+            </div>
           </div>
         </div>
       </nav>

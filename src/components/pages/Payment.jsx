@@ -45,21 +45,24 @@ function Payment() {
       }),
     })
       .then((res) => res.json())
-      .then((data) => {
+      .then(() => {
         setMessage("Payment successful! Redirecting to dashboard...");
-        // redirect and trigger tenant dashboard refresh
         setTimeout(() => {
           navigate("/tenant-dashboard", { state: { refresh: true } });
         }, 2000);
-      })
-      .catch((err) => {
-        console.error("Payment error:", err);
-        setMessage("Payment failed. Try again.");
       });
   };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-6">
+      {/* Back Button */}
+      <button
+        onClick={() => navigate(-1)}
+        className="absolute top-6 left-6 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg"
+      >
+        ← Back
+      </button>
+
       <h2 className="text-2xl font-bold mb-4">Make Payment</h2>
 
       {property ? (
