@@ -20,6 +20,10 @@ function LandlordDash() {
     image_url: "",
   });
 
+  // >>> Added code starts
+  const [income, setIncome] = useState(0);
+  // >>> Added code ends
+
   // ✅ Load landlord data safely
   useEffect(() => {
     if (!user) {
@@ -55,6 +59,20 @@ function LandlordDash() {
       .then((landlordBookings) => {
         setBookings(landlordBookings);
         setLoading(false);
+
+        // >>> Added code starts
+        // Fetch landlord income summary
+        fetch(`${API_BASE}/landlord/income?landlord_id=${landlordId}`)
+          .then((r) => r.json())
+          .then((data) => {
+            if (data && typeof data.income !== "undefined") {
+              setIncome(data.income);
+            }
+          })
+          .catch((err) => {
+            console.error("Error fetching landlord income:", err);
+          });
+        // >>> Added code ends
       })
       .catch((err) => {
         console.error("Error loading dashboard:", err);
@@ -193,6 +211,16 @@ function LandlordDash() {
             <p className="text-gray-700">
               {user.name} ({user.role})
             </p>
+
+            {/* >>> Added code starts */}
+            <div className="text-right mr-4">
+              <p className="text-sm text-gray-500">Total income</p>
+              <p className="text-lg font-semibold text-green-700">
+                KSh {Number(income).toLocaleString()}
+              </p>
+            </div>
+            {/* >>> Added code ends */}
+
             <button
               onClick={() => {
                 logoutUser();

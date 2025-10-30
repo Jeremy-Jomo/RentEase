@@ -18,6 +18,7 @@ function Payment() {
   });
 
   const [message, setMessage] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (property) {
@@ -31,7 +32,12 @@ function Payment() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch("http://localhost:5000/payments", {
+
+    if (submitting) return;
+    setSubmitting(true);
+    setMessage("Processing payment...");
+
+    fetch("https://renteasebackend-1.onrender.com/payments", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -40,21 +46,38 @@ function Payment() {
       body: JSON.stringify({
         booking_id: bookingId,
         tenant_id: user.id,
-        amount: formData.amount,
+        amount: Number(formData.amount),
         payment_method: "digital_wallet",
       }),
     })
-      .then((res) => res.json())
+      .then((res) =>
+        res.text().then((text) => {
+          let data;
+          try {
+            data = JSON.parse(text);
+          } catch {
+            throw new Error("Server returned non-JSON response");
+          }
+          if (!res.ok)
+            throw new Error(data.error || data.message || "Payment failed");
+          return data;
+        })
+      )
       .then((data) => {
-        setMessage("Payment successful! Redirecting to dashboard...");
-        // redirect and trigger tenant dashboard refresh
+        setMessage(
+          data?.message
+            ? `${data.message} Redirecting to dashboard...`
+            : "Payment successful! Redirecting..."
+        );
+
         setTimeout(() => {
           navigate("/tenant-dashboard", { state: { refresh: true } });
-        }, 2000);
+        }, 1200);
       })
       .catch((err) => {
         console.error("Payment error:", err);
-        setMessage("Payment failed. Try again.");
+        setMessage(err.message || "Payment failed. Try again.");
+        setSubmitting(false);
       });
   };
 
@@ -125,9 +148,12 @@ function Payment() {
 
         <button
           type="submit"
-          className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold"
+          disabled={submitting}
+          className={`w-full ${
+            submitting ? "opacity-60 cursor-not-allowed" : ""
+          } bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold`}
         >
-          Pay Now
+          {submitting ? "Processing..." : "Pay Now"}
         </button>
       </form>
 
