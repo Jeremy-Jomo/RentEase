@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { Link } from "react-router-dom";
 
 function Register() {
   const navigate = useNavigate();
@@ -31,16 +32,19 @@ function Register() {
     setRegisterSuccess("");
 
     try {
-      const response = await fetch("https://renteasebackend-1.onrender.com/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: values.name,
-          email: values.email,
-          password: values.password,
-          role: values.role,
-        }),
-      });
+      const response = await fetch(
+        "https://renteasebackend-1.onrender.com/register",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: values.name,
+            email: values.email,
+            password: values.password,
+            role: values.role,
+          }),
+        }
+      );
 
       const data = await response.json();
 
@@ -205,12 +209,12 @@ function Register() {
               {/* Footer */}
               <p className="text-sm text-center text-gray-600 mt-4">
                 Already have an account?{" "}
-                <a
-                  href="/login"
+                <Link
+                  to="/login"
                   className="font-semibold text-black hover:text-gray-700 underline"
                 >
                   Login here
-                </a>
+                </Link>
               </p>
             </Form>
           )}

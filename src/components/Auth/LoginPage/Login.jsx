@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { UserContext } from "../../pages/context/UserContext";
+import { Link } from "react-router-dom";
 
 function Login() {
   const navigate = useNavigate();
@@ -68,7 +69,7 @@ function Login() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 relative">
-      {/* 🏠 Back to Home Button */}
+      {/*Back to Home Button */}
       <button
         onClick={() => navigate("/")}
         className="absolute top-6 left-6 bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition duration-300"
@@ -144,12 +145,12 @@ function Login() {
 
               <p className="text-sm text-center text-gray-600 mt-4">
                 No account?{" "}
-                <a
-                  href="/register"
+                <Link
+                  to="/register"
                   className="font-semibold text-black hover:text-gray-700 underline"
                 >
                   Create account
-                </a>
+                </Link>
               </p>
             </Form>
           )}
