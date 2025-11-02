@@ -32,7 +32,6 @@ const PropertyDetails = () => {
     );
 
   const handleRentRedirect = () => {
-    // navigate to Rent page, property will be passed via state
     navigate(`/rent/${property.id}`, { state: { property } });
   };
 

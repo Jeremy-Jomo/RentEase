@@ -12,7 +12,6 @@ function Rent() {
   const [approved, setApproved] = useState(false);
   const [loadingUser, setLoadingUser] = useState(true);
 
-  // ✅ Check auth before rendering
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!user) {
@@ -24,7 +23,7 @@ function Rent() {
       } else {
         setLoadingUser(false);
       }
-    }, 100); // small delay for context hydration
+    }, 100);
 
     return () => clearTimeout(timer);
   }, [user, navigate]);

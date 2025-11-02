@@ -8,7 +8,6 @@ const PropertyListing = () => {
   const { properties, loading } = useProperties();
   const navigate = useNavigate();
 
-  // 🔹 Filter states
   const [filters, setFilters] = useState({
     location: "",
     minRent: "",
@@ -18,7 +17,6 @@ const PropertyListing = () => {
 
   const [filteredProps, setFilteredProps] = useState([]);
 
-  // 🔹 Filter logic
   const applyFilters = () => {
     let filtered = [...properties];
 
@@ -67,7 +65,6 @@ const PropertyListing = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">
-      {/* ✅ Navbar */}
       <header className="fixed top-0 left-0 w-full bg-white/80 backdrop-blur-md shadow-md z-50">
         <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
           <div
@@ -102,7 +99,6 @@ const PropertyListing = () => {
         </div>
       </header>
 
-      {/* ✅ Filter Section */}
       <section className="pt-28 px-6">
         <div className="max-w-7xl mx-auto bg-white/90 backdrop-blur-md rounded-2xl shadow-lg p-6 border border-gray-200">
           <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
@@ -161,7 +157,6 @@ const PropertyListing = () => {
         </div>
       </section>
 
-      {/* ✅ Property Listings */}
       <main className="px-6 py-14">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl font-extrabold mb-10 text-gray-800 text-center tracking-tight">

@@ -21,11 +21,14 @@ function Login() {
   const handleSubmit = async (values, { setSubmitting }) => {
     setLoginError("");
     try {
-      const response = await fetch("https://renteasebackend-1.onrender.com/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      });
+      const response = await fetch(
+        "https://renteasebackend-1.onrender.com/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(values),
+        }
+      );
 
       const data = await response.json();
 
@@ -38,7 +41,7 @@ function Login() {
           name: data.user?.name,
         });
 
-        // ✅ Role-based redirect
+        //Role-based redirect
         switch (data.user?.role) {
           case "admin":
             navigate("/admin-dashboard");

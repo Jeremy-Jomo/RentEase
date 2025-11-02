@@ -45,7 +45,6 @@ const LandingPage = () => {
               </button>
             </div>
 
-            {/* 👇 Added Login & Get Started Buttons */}
             <div className="flex space-x-4">
               <button
                 onClick={() => navigate("/login")}
