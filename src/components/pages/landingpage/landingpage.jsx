@@ -45,7 +45,6 @@ const LandingPage = () => {
               </button>
             </div>
 
-            
             <div className="flex space-x-4">
               <button
                 onClick={() => navigate("/login")}
@@ -186,4 +185,3 @@ const LandingPage = () => {
 };
 
 export default LandingPage;
-

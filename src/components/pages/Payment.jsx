@@ -58,7 +58,8 @@ function Payment() {
           } catch {
             throw new Error("Server returned non-JSON response");
           }
-          if (!res.ok) throw new Error(data.error || data.message || "Payment failed");
+          if (!res.ok)
+            throw new Error(data.error || data.message || "Payment failed");
           return data;
         })
       )
@@ -82,14 +83,6 @@ function Payment() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-6">
-      {/* Back Button */}
-      <button
-        onClick={() => navigate(-1)}
-        className="absolute top-6 left-6 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg"
-      >
-        ← Back
-      </button>
-
       <h2 className="text-2xl font-bold mb-4">Make Payment</h2>
 
       {property ? (
@@ -156,7 +149,9 @@ function Payment() {
         <button
           type="submit"
           disabled={submitting}
-          className={`w-full ${submitting ? "opacity-60 cursor-not-allowed" : ""} bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold`}
+          className={`w-full ${
+            submitting ? "opacity-60 cursor-not-allowed" : ""
+          } bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold`}
         >
           {submitting ? "Processing..." : "Pay Now"}
         </button>

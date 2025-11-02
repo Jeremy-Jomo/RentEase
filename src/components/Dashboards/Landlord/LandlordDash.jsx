@@ -20,11 +20,9 @@ function LandlordDash() {
     image_url: "",
   });
 
-  // >>> Added code starts
   const [income, setIncome] = useState(0);
-  // >>> Added code ends
 
-  // ✅ Load landlord data safely
+  //  Load landlord data safely
   useEffect(() => {
     if (!user) {
       navigate("/login");
@@ -60,8 +58,6 @@ function LandlordDash() {
         setBookings(landlordBookings);
         setLoading(false);
 
-        // >>> Added code starts
-        // Fetch landlord income summary
         fetch(`${API_BASE}/landlord/income?landlord_id=${landlordId}`)
           .then((r) => r.json())
           .then((data) => {
@@ -72,7 +68,6 @@ function LandlordDash() {
           .catch((err) => {
             console.error("Error fetching landlord income:", err);
           });
-        // >>> Added code ends
       })
       .catch((err) => {
         console.error("Error loading dashboard:", err);
@@ -80,13 +75,13 @@ function LandlordDash() {
       });
   }, [user, navigate]);
 
-  // ✅ Toast helper
+  // Toast helper
   const showNotification = (message, type = "success") => {
     setNotification({ message, type });
     setTimeout(() => setNotification(null), 2500);
   };
 
-  // ✅ Delete Property
+  //  Delete Property
   const handleDelete = (propertyId) => {
     if (!confirm("Are you sure you want to delete this property?")) return;
 
@@ -104,7 +99,7 @@ function LandlordDash() {
       .catch(() => showNotification("Failed to delete property", "error"));
   };
 
-  // ✅ Start Editing
+  //  Start Editing
   const startEditing = (property) => {
     setEditingId(property.id);
     setEditData({
@@ -116,7 +111,7 @@ function LandlordDash() {
     });
   };
 
-  // ✅ Save Edit
+  //  Save Edit
   const saveEdit = (propertyId) => {
     fetch(`${API_BASE}/properties/${propertyId}`, {
       method: "PUT",
@@ -137,7 +132,7 @@ function LandlordDash() {
       .catch(() => showNotification("Error updating property", "error"));
   };
 
-  // ✅ Approve Booking
+  //  Approve Booking
   const handleApproveBooking = (bookingId) => {
     fetch(`${API_BASE}/bookings/${bookingId}`, {
       method: "PUT",
@@ -157,7 +152,7 @@ function LandlordDash() {
       .catch(() => showNotification("Error approving booking", "error"));
   };
 
-  // ✅ Delete Booking
+  // Delete Booking
   const handleDeleteBooking = (bookingId) => {
     if (!confirm("Are you sure you want to delete this booking?")) return;
 
@@ -181,7 +176,7 @@ function LandlordDash() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6 relative">
-      {/* ✅ Toast Notification */}
+      {/*  Toast Notification */}
       {notification && (
         <div
           className={`fixed top-5 right-5 px-4 py-2 rounded-lg text-white shadow-md ${
@@ -192,7 +187,7 @@ function LandlordDash() {
         </div>
       )}
 
-      {/* ✅ Header */}
+      {/* Header */}
       <header className="flex justify-between items-center bg-white p-4 rounded-lg shadow-sm">
         <div className="flex items-center gap-3">
           <button
@@ -212,14 +207,12 @@ function LandlordDash() {
               {user.name} ({user.role})
             </p>
 
-            {/* >>> Added code starts */}
             <div className="text-right mr-4">
               <p className="text-sm text-gray-500">Total income</p>
               <p className="text-lg font-semibold text-green-700">
                 KSh {Number(income).toLocaleString()}
               </p>
             </div>
-            {/* >>> Added code ends */}
 
             <button
               onClick={() => {
@@ -234,7 +227,7 @@ function LandlordDash() {
         )}
       </header>
 
-      {/* ✅ Bookings Section */}
+      {/* Bookings Section */}
       <section className="bg-white rounded-xl shadow-md p-6 mt-6">
         <h3 className="text-lg font-semibold text-gray-800 mb-3">
           Bookings Overview
@@ -263,7 +256,7 @@ function LandlordDash() {
                     Location: {booking.property?.location || "N/A"}
                   </p>
                   <p className="text-gray-600 text-sm">
-                    Rent: ${booking.property?.rent_price || "N/A"}
+                    Rent: Ksh{booking.property?.rent_price || "N/A"}
                   </p>
                   <p className="text-gray-600 text-sm">
                     Tenant: {booking.tenant_name || "Unknown"}
@@ -309,7 +302,7 @@ function LandlordDash() {
         )}
       </section>
 
-      {/* ✅ Properties Section */}
+      {/* Properties Section */}
       <main className="mt-6">
         <section>
           <div className="flex justify-between items-center mb-4">
@@ -431,7 +424,7 @@ function LandlordDash() {
 
                         <div className="flex justify-between items-center mt-4">
                           <p className="text-gray-800 font-bold">
-                            ${property.rent_price}
+                            Ksh{property.rent_price}
                           </p>
                           <div className="flex gap-2">
                             <button

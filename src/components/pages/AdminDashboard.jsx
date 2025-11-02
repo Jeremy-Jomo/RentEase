@@ -53,16 +53,18 @@ function AdminDashboard() {
     navigate("/login");
   };
 
-
   const handleDeleteUser = async (userId) => {
     const token = user?.token || localStorage.getItem("token");
     if (!window.confirm("Are you sure you want to delete this user?")) return;
 
     try {
-      const res = await fetch(`https://renteasebackend-1.onrender.com/admin/users/${userId}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await fetch(
+        `https://renteasebackend-1.onrender.com/admin/users/${userId}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       if (res.ok) {
         setUsers(users.filter((u) => u.id !== userId));
       } else {
@@ -73,16 +75,19 @@ function AdminDashboard() {
     }
   };
 
-
   const handleDeleteProperty = async (propertyId) => {
     const token = user?.token || localStorage.getItem("token");
-    if (!window.confirm("Are you sure you want to delete this property?")) return;
+    if (!window.confirm("Are you sure you want to delete this property?"))
+      return;
 
     try {
-      const res = await fetch(`https://renteasebackend-1.onrender.com/properties/${propertyId}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await fetch(
+        `https://renteasebackend-1.onrender.com/properties/${propertyId}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       if (res.ok) {
         setProperties(properties.filter((p) => p.id !== propertyId));
       } else {
@@ -103,11 +108,12 @@ function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-white text-black px-8 py-10">
-      {/* Header */}
       <div className="flex justify-between items-center mb-10">
         <div>
           <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-          <p className="text-gray-500">Manage users, properties, and bookings</p>
+          <p className="text-gray-500">
+            Manage users, properties, and bookings
+          </p>
         </div>
         <button
           onClick={handleLogout}
@@ -117,7 +123,6 @@ function AdminDashboard() {
         </button>
       </div>
 
-      {/* Stats Overview */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div className="border border-gray-200 rounded-xl p-6 shadow-sm">
           <p className="text-gray-500">Total Users</p>
@@ -161,7 +166,6 @@ function AdminDashboard() {
       {/* Content based on active tab */}
       {activeTab === "Overview" && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
-          {/* Recent Activity */}
           <div className="border border-gray-200 rounded-xl p-6 shadow-sm">
             <h3 className="text-lg font-semibold mb-4">Recent Activity</h3>
             <ul className="text-gray-700 space-y-2 list-disc list-inside">

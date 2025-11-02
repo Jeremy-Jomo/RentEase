@@ -32,7 +32,6 @@ const PropertyDetails = () => {
     );
 
   const handleRentRedirect = () => {
-    // navigate to Rent page, property will be passed via state
     navigate(`/rent/${property.id}`, { state: { property } });
   };
 
@@ -103,7 +102,7 @@ const PropertyDetails = () => {
 
             <div className="flex justify-end mt-8 space-x-4">
               <button
-                onClick={() => navigate("/propertylisting")}
+                onClick={() => navigate(-1)}
                 className="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold"
               >
                 ← Back to Properties

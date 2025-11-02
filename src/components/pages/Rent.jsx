@@ -12,7 +12,6 @@ function Rent() {
   const [approved, setApproved] = useState(false);
   const [loadingUser, setLoadingUser] = useState(true);
 
-  // ✅ Check auth before rendering
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!user) {
@@ -24,7 +23,7 @@ function Rent() {
       } else {
         setLoadingUser(false);
       }
-    }, 100); // small delay for context hydration
+    }, 100);
 
     return () => clearTimeout(timer);
   }, [user, navigate]);
@@ -75,14 +74,23 @@ function Rent() {
         <p>Loading property...</p>
       )}
 
-      {!status && (
+      <div className="mt-6 flex gap-4">
         <button
-          onClick={handleRent}
-          className="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg"
+          onClick={() => navigate(-1)}
+          className="bg-black hover:bg-gray-400 text-white px-6 py-2 rounded-lg"
         >
-          Request to Rent
+          ← Back
         </button>
-      )}
+
+        {!status && (
+          <button
+            onClick={handleRent}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg"
+          >
+            Request to Rent
+          </button>
+        )}
+      </div>
 
       {status && (
         <p className="mt-4 font-semibold text-gray-700">Status: {status}</p>
